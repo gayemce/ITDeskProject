@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -14,7 +15,7 @@ interface UploadEvent {
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [CommonModule, InputTextModule, FormsModule, FileUploadModule, ToastModule],
+  imports: [CommonModule, InputTextModule, FormsModule, FileUploadModule, ToastModule, InputTextareaModule],
   providers: [MessageService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.css'
@@ -23,13 +24,18 @@ export class CreateComponent {
   subject: string = "";
   uploadedFiles: any[] = [];
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService) { }
 
-  onUpload(event:any) {
-      for(let file of event.files) {
-          this.uploadedFiles.push(file);
-      }
+  onUpload(event: any) {
+    for (let file of event.files) {
+      this.uploadedFiles.push(file);
+      console.log(this.uploadedFiles);
+    }
 
-      this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+    this.messageService.add({ severity: 'info', summary: 'File Uploaded', detail: '' });
+  }
+
+  create() {
+    console.log(this.uploadedFiles);
   }
 }

@@ -1,13 +1,47 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule, 
+    CardModule, 
+    ButtonModule, 
+    DividerModule, 
+    InputTextModule, 
+    PasswordModule, 
+    FormsModule, 
+    ToastModule],
+  providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export default class LoginComponent {
+  userNameOrEmail: string = "";
+  password: string = "";
 
+  constructor(
+    private message: MessageService)
+    {}
+
+  signIn(){
+    if(this.userNameOrEmail.length < 3){
+      this.message.add({ severity: 'warn', summary: 'Validasyon Hatası', detail: 'Geçerli bir kullanıcı adı ya da email girin!'});
+      return;
+    }
+
+    if(this.password.length < 6){
+      this.message.add({ severity: 'warn', summary: 'Validasyon Hatası', detail: 'Şifreniz en az 6 karakter olmalıdır.'});
+      return;
+    }
+  }
 }
