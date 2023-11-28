@@ -1,4 +1,5 @@
-﻿using ITDeskServer.DTOs;
+﻿using Azure.Core;
+using ITDeskServer.DTOs;
 using ITDeskServer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,10 +12,12 @@ namespace ITDeskServer.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
+    private readonly SignInManager<AppUser> _signInManager;
 
-    public AuthController(UserManager<AppUser> userManager)
+    public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     [HttpPost]
@@ -30,7 +33,31 @@ public class AuthController : ControllerBase
             }
         }
 
-        if(appUser.WrongTryCount == 3)
+        var result = await _signInManager.CheckPasswordSignInAsync(appUser, request.Password, true);
+
+        if (result.IsLockedOut)
+        {
+            TimeSpan? timeSpan = appUser.LockoutEnd - DateTime.UtcNow;
+            if(timeSpan is not null)
+            return BadRequest(new { Message = $"Kullanıcınız 3 kere yanlış şifre girişinden dolayı {Math.Ceiling(timeSpan.Value.TotalMinutes)} dakika kitlenmiştir." });
+        }
+
+        if (result.IsNotAllowed)
+        {
+            return BadRequest(new { Message = "Mail adresiniz onaylı değil!" });
+        }
+
+        if (!result.Succeeded)
+        {
+            return BadRequest(new { Message = "Şifreniz yanlış!" });
+        }
+
+        return Ok();
+    }
+
+    private async Task CheckPassword(AppUser appUser, string password)
+    {
+        if (appUser.WrongTryCount == 3)
         {
             TimeSpan timeSpan = appUser.LastWrongTry.Date - DateTime.Now.Date;
             if (timeSpan.TotalDays < 0)
@@ -48,41 +75,41 @@ public class AuthController : ControllerBase
                 }
                 else
                 {
-                    return BadRequest(new { ErrorMessage = $"Şifre üst üste üç defa yanlış girildiği için {Math.Ceiling(timeSpan.TotalMinutes)} dakika beklemelisiniz!" });
+                    //return BadRequest(new { ErrorMessage = $"Şifre üst üste üç defa yanlış girildiği için {Math.Ceiling(timeSpan.TotalMinutes)} dakika beklemelisiniz!" });
                 }
             }
         }
 
-        var checkPasswordIsCurrect = await _userManager.CheckPasswordAsync(appUser, request.Password);
+        var checkPasswordIsCurrect = await _userManager.CheckPasswordAsync(appUser, password);
+
         if (!checkPasswordIsCurrect)
         {
             TimeSpan timeSpan = appUser.LastWrongTry.Date - DateTime.Now.Date;
-            if(timeSpan.TotalDays < 0)
+            if (timeSpan.TotalDays < 0)
             {
                 appUser.WrongTryCount = 0;
                 await _userManager.UpdateAsync(appUser);
             }
 
-            if(appUser.WrongTryCount < 3)
+            if (appUser.WrongTryCount < 3)
             {
                 appUser.WrongTryCount++;
                 appUser.LastWrongTry = DateTime.Now;
                 await _userManager.UpdateAsync(appUser);
             }
 
-            if(appUser.WrongTryCount == 3)
+            if (appUser.WrongTryCount == 3)
             {
                 appUser.LastWrongTry = DateTime.Now;
                 appUser.LockDate = DateTime.Now.AddMinutes(15);
                 await _userManager.UpdateAsync(appUser);
-                return BadRequest(new { Message = "Şifre üst üste üç defa yanlış girildiği için kullanıcınız kilitlendi. 15 dakika sonra tekrar deneyebilirsiniz." });
+                //return BadRequest(new { Message = "Şifre üst üste üç defa yanlış girildiği için kullanıcınız kilitlendi. 15 dakika sonra tekrar deneyebilirsiniz." });
             }
-            return BadRequest(new { Message = $"Şifre yanlış! Deneme {appUser.WrongTryCount}/3" });
+            //return BadRequest(new { Message = $"Şifre yanlış! Deneme {appUser.WrongTryCount}/3" });
         }
 
         //Bir veya iki yanlış denemeden sonra doğru girildiyse sayaç sıfırlanır.
         appUser.WrongTryCount = 0;
         await _userManager.UpdateAsync(appUser);
-        return Ok();
     }
 }

@@ -13,9 +13,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 //Identity kütüphanesinin DbContext ile baðlý olduðunu bildirmek için:
-builder.Services.AddIdentityCore<AppUser>(opt =>
+builder.Services.AddIdentity<AppUser, AppRole>(opt =>
 {
     opt.Password.RequiredLength = 6;
+    opt.SignIn.RequireConfirmedEmail = true;
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    opt.Lockout.MaxFailedAccessAttempts = 2;
+    opt.Lockout.AllowedForNewUsers = true;
 
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -30,6 +34,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//app.UseAuthentication();
 
 app.UseHttpsRedirection();
 

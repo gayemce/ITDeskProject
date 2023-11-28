@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITDeskServer", "ITDeskServer.csproj", "{5E33CACE-0465-47C3-ACD0-E8F554406924}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITDeskServer", "ITDeskServer.csproj", "{5E33CACE-0465-47C3-ACD0-E8F554406924}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED27F98A-7D73-44CE-937E-7C29D0F198D4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

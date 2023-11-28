@@ -273,3 +273,5 @@ C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\obj\Debug\n
 C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\obj\Debug\net8.0\ITDeskServer.pdb
 C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\obj\Debug\net8.0\ITDeskServer.genruntimeconfig.cache
 C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\obj\Debug\net8.0\ref\ITDeskServer.dll
+C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\ITDesk.SignInResult.dll
+C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\ITDesk.SignInResult.pdb
