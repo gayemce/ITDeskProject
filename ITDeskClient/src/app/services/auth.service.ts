@@ -11,7 +11,7 @@ export class AuthService {
   ) { }
 
   checkAuthentication(){
-    if(localStorage.getItem("token")) return true;
+    if(localStorage.getItem("response")) return true;
 
     this.router.navigateByUrl("/login");
     return false;

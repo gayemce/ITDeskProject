@@ -9,14 +9,14 @@
             <span class="p-inputgroup-addon">
                 <i class="pi pi-user"></i>
             </span>
-            <input [(ngModel)]="userNameOrEmail" pInputText placeholder="Username" />
+            <input [(ngModel)]="request.userNameOrEmail" pInputText placeholder="Username" />
         </div>
         <div class="mt-2">
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-lock"></i>
                 </span>
-                <p-password [(ngModel)]="password" placeholder="Password" [style]="{width: '100%'}">
+                <p-password [(ngModel)]="request.password" placeholder="Password" [style]="{width: '100%'}">
                     <ng-template pTemplate="header">
                         <h6>Şifre Girin</h6>
                     </ng-template>
@@ -33,6 +33,10 @@
                     </ng-template>
                 </p-password>
             </div>
+        </div>
+        <div class="mt-2">
+            <p-checkbox [(ngModel)]="request.rememberMe" [binary]="true" inputId="ny"></p-checkbox>
+            <label for="ny">Beni Hatırla</label>
         </div>
         <ng-template pTemplate="footer">
             <p-button (onClick)="signIn()" [style]="{width: '100%'}" label="Giriş Yap"></p-button>
