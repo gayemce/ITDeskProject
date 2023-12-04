@@ -6,6 +6,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-layouts',
@@ -18,7 +19,8 @@ export class LayoutsComponent implements OnInit {
   items: MenuItem[] | undefined;
 
   constructor(
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ){}
 
   ngOnInit() {

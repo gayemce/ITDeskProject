@@ -45,3 +45,7 @@ body {
 .w100{
     width: 100%;
 }
+
+.gap-1{
+   gap: 5px;
+}
