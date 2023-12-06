@@ -35,6 +35,8 @@ export class LayoutsComponent implements OnInit {
 
   logout(){
     localStorage.removeItem("response");
-    this.router.navigateByUrl("/login");
+    location.href = "/login";
+    //bu kod spa olduğu için google login ile sürekli giriş yapamaya çalışıyor
+    //this.router.navigateByUrl("/login");
   }
 }

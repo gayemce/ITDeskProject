@@ -7,6 +7,7 @@ public sealed class AppUser : IdentityUser<Guid>
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
+    public string? GoogleProvideId { get; set; }
 
     //virtual tanımlama için örnek
     [NotMapped]

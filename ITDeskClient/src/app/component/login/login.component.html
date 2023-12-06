@@ -40,6 +40,12 @@
         </div>
         <ng-template pTemplate="footer">
             <p-button (onClick)="signIn()" [style]="{width: '100%'}" label="Giriş Yap"></p-button>
+            <div class="flex justify-content-center">
+               <p>-- Google hesabınızla giriş yapın --</p>
+           </div>
+           <div class="flex justify-content-center">                
+               <asl-google-signin-button type='icon' size='medium' width='400'></asl-google-signin-button>        
+           </div>
         </ng-template>
     </p-card>
 </div>

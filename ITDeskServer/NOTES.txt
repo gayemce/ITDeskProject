@@ -1,0 +1,5 @@
+05.12.2023
+*expression, mevcut classýn memberlarýný elde etmek için kullanýlýr.
+*configuration, mevcut classýn içersindeki parametrelerini elde etmek için kullanýlýr.
+*options
+*configure
