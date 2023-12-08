@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -16,15 +17,17 @@ interface UploadEvent {
   selector: 'app-create',
   standalone: true,
   imports: [CommonModule, InputTextModule, FormsModule, FileUploadModule, ToastModule, InputTextareaModule],
-  providers: [MessageService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.css'
 })
 export class CreateComponent {
   subject: string = "";
+  summary: string = "";
   uploadedFiles: any[] = [];
 
-  constructor(private messageService: MessageService) { }
+  constructor(
+    private messageService: MessageService,
+    private dialog: DynamicDialogRef) { }
 
   onUpload(event: any) {
     for (let file of event.files) {
@@ -36,6 +39,23 @@ export class CreateComponent {
   }
 
   create() {
-    console.log(this.uploadedFiles);
+    if (this.subject === "") {
+      this.messageService.add({ severity: 'error', summary: 'Konu alanı boş olamaz', detail: 'Lütfen değer girin' });
+      return;
+    }
+
+    if (this.summary === "") {
+      this.messageService.add({ severity: 'error', summary: 'Özet alanı boş olamaz', detail: 'Lütfen değer girin' });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("subject", this.subject);
+    formData.append("summary", this.summary);
+    for (let file of this.uploadedFiles) {
+      formData.append("files", file, file.name);
+    }
+    //home componente göndermek için, create fonksiyonunda dialogu kapat formData'yı gönder
+    this.dialog.close(formData);
   }
 }

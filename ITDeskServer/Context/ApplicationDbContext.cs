@@ -11,7 +11,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     {
     }
 
-    public DbSet<Ticket> tickets { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
     public DbSet<TicketFile> TicketFiles { get; set; }
     public DbSet<TicketDetail> TicketDetails { get; set; }
 

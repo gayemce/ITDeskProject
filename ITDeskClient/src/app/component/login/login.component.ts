@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { LoginModel } from '../../models/login.model';
 import { CheckboxModule } from 'primeng/checkbox';
 import { GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-social-login';
+import { ErrorService } from '../../services/error.service';
+import { HttpService } from '../../services/http.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +31,6 @@ import { GoogleSigninButtonModule, SocialAuthService } from '@abacritt/angularx-
     CheckboxModule,
     GoogleSigninButtonModule
   ],
-  providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -38,31 +39,17 @@ export default class LoginComponent implements OnInit {
 
   constructor(
     private message: MessageService,
-    private http: HttpClient,
+    private http: HttpService, //Service
     private router: Router,
-    private auth: SocialAuthService) { }
+    private auth: SocialAuthService,
+    private error: ErrorService) { }
 
   ngOnInit(): void {
     this.auth.authState.subscribe(res => {
-      this.http.post("https://localhost:7159/api/Auth/GoogleLogin", res).subscribe({
-        next: res => {
-          localStorage.setItem("response", JSON.stringify(res));
-          this.router.navigateByUrl("/");
-        },
-        error: (err: HttpErrorResponse) => {
-          //*Server Validation Kontrol
-          console.log(err);
-          switch (err.status) {
-            case 400:
-              this.message.add({ severity: 'error', summary: 'Hata!', detail: err.error.message });
-              break;
-            case 0:
-              this.message.add({ severity: 'error', summary: 'Hata!', detail: 'API Adresine ulaşılamıyor!' });
-              break;
-          }
-        }
+      this.http.post("Auth/GoogleLogin", res, (data) => {
+        localStorage.setItem("response", JSON.stringify(data));
+        this.router.navigateByUrl("/");
       })
-      console.log(res);
     })
   }
 
@@ -129,28 +116,9 @@ export default class LoginComponent implements OnInit {
     // }
 
 
-    this.http.post("https://localhost:7159/api/Auth/Login", this.request)
-      .subscribe({
-        next: res => {
-          localStorage.setItem("response", JSON.stringify(res));
-          this.router.navigateByUrl("/");
-        },
-        error: (err: HttpErrorResponse) => {
-          //*Server Validation Kontrol
-          console.log(err);
-          switch (err.status) {
-            case 400:
-              this.message.add({ severity: 'error', summary: 'Hata!', detail: err.error.message });
-              break;
-            case 422:
-              for (let e of err.error)
-                this.message.add({ severity: 'error', summary: "Validation Hatası!", detail: e });
-              break;
-            case 0:
-              this.message.add({ severity: 'error', summary: 'Hata!', detail: 'API Adresine ulaşılamıyor!' });
-              break;
-          }
-        }
-      })
+    this.http.post("Auth/Login", this.request, res => {
+      localStorage.setItem("response", JSON.stringify(res));
+      this.router.navigateByUrl("/");
+    });
   }
 }

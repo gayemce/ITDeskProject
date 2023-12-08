@@ -3,3 +3,7 @@
 *configuration, mevcut classýn içersindeki parametrelerini elde etmek için kullanýlýr.
 *options
 *configure
+
+06.12.2023
+*Abstract classlar newlenemez sadece inherit edilir.
+*[Authorize(AuthenticationSchemes = "Bearer")] User'a user claimsleri yerleþtirir.

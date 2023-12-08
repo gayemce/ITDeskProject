@@ -8,6 +8,7 @@ import { TokenModel } from '../models/token.model';
 })
 export class AuthService {
   token: TokenModel = new TokenModel();
+  tokenString: string = "";
 
   constructor(private router: Router) { }
 
@@ -18,12 +19,12 @@ export class AuthService {
     }
 
     const responseJson = JSON.parse(responseString);
-    const token = responseJson?.accessToken;
-    if (!token) {
+    this.tokenString = responseJson?.accessToken;
+    if (!this.tokenString) {
       return this.redirectToLogin();
     }
 
-    const decode: any = jwtDecode(token);
+    const decode: any = jwtDecode(this.tokenString);
     this.token.email = decode?.Email;
     this.token.name = decode?.Name;
     this.token.userName = decode?.UserName;
