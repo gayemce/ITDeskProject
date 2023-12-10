@@ -17,6 +17,10 @@ export const routes: Routes = [
             {
                 path: "",
                 loadComponent: ()=> import("./component/home/home.component")
+            },
+            {
+                path: "ticket-details/:value",
+                loadComponent: ()=> import("./component/detail/detail.component")
             }
         ]
     }

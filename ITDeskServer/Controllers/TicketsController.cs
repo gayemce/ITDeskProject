@@ -2,8 +2,9 @@
 using ITDeskServer.Context;
 using ITDeskServer.DTOs;
 using ITDeskServer.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITDeskServer.Controllers;
@@ -20,12 +21,11 @@ public class TicketsController : ApiController
     [HttpPost]
     public IActionResult Add([FromForm] TicketAddDto request)
     {
-        //userId: gönderilen token içerisindeki claims listesinden alındı
         string? userId = HttpContext.User.Claims.Where(p => p.Type == "UserId").Select(s => s.Value).FirstOrDefault();
 
-        if(userId is null)
+        if (userId is null)
         {
-            return BadRequest(new { Message = "Kullanıcı bulunamadı!" });
+            return BadRequest(new { Message = "Kullanıcı bulunmadı!" });
         }
 
         Ticket ticket = new()
@@ -37,15 +37,15 @@ public class TicketsController : ApiController
             Subject = request.Subject,
         };
 
-        if(request.Files is not null)
+        if (request.Files is not null)
         {
             ticket.FileUrls = new();
-            // Birden fazla dosyanın verilen adrese kopyalanması, kaydedilmesi
+
             foreach (var file in request.Files)
             {
                 string fileFormat = file.FileName.Substring(file.FileName.LastIndexOf('.'));
                 string fileName = Guid.NewGuid().ToString() + fileFormat;
-                using (var stream = System.IO.File.Create(@"C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskClient\src\assets\files\" + fileName))
+                using (var stream = System.IO.File.Create(@"C:\YMYP1\06.WebApi\ITDesk\ITDeskClient\src\assets\files\" + fileName))
                 {
                     file.CopyTo(stream);
                 }
@@ -73,29 +73,39 @@ public class TicketsController : ApiController
         _context.Add(ticket);
         _context.Add(ticketDetail);
         _context.SaveChanges();
+
+
         return NoContent();
     }
 
     [HttpGet]
+    [EnableQuery]
     public IActionResult GetAll()
     {
         string? userId = HttpContext.User.Claims.Where(p => p.Type == "UserId").Select(s => s.Value).FirstOrDefault();
-
-        if(userId is null)
+        if (userId is null)
         {
-            return BadRequest(new { Message = "Kullanıcı bulunamadı!" });
+            return BadRequest(new { Message = "Kullanıcı bulunmadı!" });
         }
 
-        List<TicketResponseDto> tickets = 
+        IQueryable<TicketResponseDto> tickets =
             _context.Tickets
             .Where(p => p.AppUserId == Guid.Parse(userId))
-            .Select(s => new TicketResponseDto(
-                s.Id,
-                s.Subject,
-                s.CreatedDate,
-                s.IsOpen))
-            .ToList();
+            .Select(s => new TicketResponseDto
+            {
+                Id = s.Id,
+                CreatedDate = s.CreatedDate.ToString("o"),
+                IsOpen = s.IsOpen,
+                Subject = s.Subject
+            })
+            .AsQueryable();
 
         return Ok(tickets);
+    }
+
+    private string DateTimeToString(DateTime value)
+    {
+        return value.ToString("yyyy-MM-dd HH:mm:ss");
+
     }
 }

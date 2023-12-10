@@ -275,3 +275,8 @@ C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\obj\Debug\n
 C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\obj\Debug\net8.0\ref\ITDeskServer.dll
 C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\Microsoft.AspNetCore.OData.dll
+C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\Microsoft.OData.Core.dll
+C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\Microsoft.OData.Edm.dll
+C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\Microsoft.OData.ModelBuilder.dll
+C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskServer\bin\Debug\net8.0\Microsoft.Spatial.dll

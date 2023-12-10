@@ -5,14 +5,13 @@ import { MessageService } from 'primeng/api';
 @Injectable({
   providedIn: 'root'
 })
-export class ErrorService {
 
+export class ErrorService {
   constructor(
     private message: MessageService
   ) { }
 
   errorHandler(err: HttpErrorResponse){
-    //*Server Validation Kontrol
     console.log(err);
     switch (err.status) {
       case 400:

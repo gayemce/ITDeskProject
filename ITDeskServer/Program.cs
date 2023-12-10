@@ -4,6 +4,7 @@ using ITDeskServer.Models;
 using ITDeskServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -51,11 +52,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 //AddIdentity: Identity kütüphanesinin DbContext ile baðlý olduðunu bildirmek için:
-builder.Services.AddIdentity<AppUser, AppRole>(opt => //(yaþam süresi hangi türde scoped türünde mi?)
+builder.Services.AddIdentity<AppUser, AppRole>(opt =>
 {
     opt.Password.RequiredLength = 6;
     opt.SignIn.RequireConfirmedEmail = true;
-    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
     opt.Lockout.MaxFailedAccessAttempts = 2;
     opt.Lockout.AllowedForNewUsers = true;
 
@@ -63,7 +64,8 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt => //(yaþam süresi hangi türd
 #endregion
 
 #region Presentation
-builder.Services.AddControllers();
+//for OData
+builder.Services.AddControllers().AddOData(options => options.EnableQueryFeatures());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(setup =>
 {
