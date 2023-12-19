@@ -4,6 +4,7 @@ using ITDeskServer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITDeskServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215094715_mg3")]
+    partial class mg3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,19 +109,6 @@ namespace ITDeskServer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ITDeskServer.Models.AppUserRole", b =>
-                {
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("RoleId", "UserId");
-
-                    b.ToTable("AppUserRoles");
-                });
-
             modelBuilder.Entity("ITDeskServer.Models.Ticket", b =>
                 {
                     b.Property<Guid>("Id")
@@ -189,17 +179,6 @@ namespace ITDeskServer.Migrations
                     b.HasIndex("TicketId");
 
                     b.ToTable("TicketFiles");
-                });
-
-            modelBuilder.Entity("ITDeskServer.Models.AppUserRole", b =>
-                {
-                    b.HasOne("ITDeskServer.Models.AppRole", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("ITDeskServer.Models.Ticket", b =>
