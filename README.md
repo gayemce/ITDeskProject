@@ -1,4 +1,4 @@
-# IT Desk Projesi README
+# IT Desk Project
 
 IT Desk Projesi, Angular 17 ve .NET 8 teknolojileri kullanılarak geliştirilmiş bir web uygulamasıdır. Bu proje, kullanıcıların IT destek taleplerini oluşturabilmeleri, bu talepleri listeleme, fotoğraf ekleyebilme ve Google hesapları ile giriş yapabilme gibi özellikleri içermektedir.
 
