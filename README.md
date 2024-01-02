@@ -42,3 +42,7 @@ IT Desk Projesi, Angular 17 ve .NET 8 teknolojileri kullanılarak geliştirilmi�
 
 8. **AG Data Grid:**
    - AG Data Grid kullanılarak kullanıcılardan gelen ticketlar listelendi.
+
+## Proje Görseli
+
+![IT Desk Project](ITDesk_Project.gif)
