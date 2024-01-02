@@ -27,8 +27,8 @@ public static class ExtensionsMiddleware
             {
                 userManager.CreateAsync(new()
                 {
-                    Email = "test@test.com",
-                    UserName = "test",
+                    Email = "admin@admin.com",
+                    UserName = "admin",
                     FirstName = "IT",
                     LastName = "Admin",
                     EmailConfirmed = true,
@@ -37,11 +37,43 @@ public static class ExtensionsMiddleware
         }
     }
 
+    public static void CreateUsers(WebApplication app)
+    {
+        using (var scoped = app.Services.CreateScope())
+        {
+            var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+            var userInfos = new List<(string email, string userName, string firstName, string lastName, string password)>
+        {
+            ("dkaya@gmail.com", "dkaya", "Deniz", "Kaya", "Password12*"),
+            ("sakca@gmail.com", "semra_akca", "Semra", "Akca", "Password12*"),
+            ("cgocmen@gmail.com", "cgocmen", "Cemre", "Göcmen", "Password12*"),
+            ("ayilmaz@gmail.com", "ayilmaz", "Ali", "Yılmaz", "Password12*"),
+            ("akaraca@gmail.com", "akaracalı", "Ayşe", "Karacalı", "Password12*"),
+            ("aozturk@gmail.com", "aozturk", "Ahmet", "Öztürk", "Password12*"),
+        };
+
+            foreach (var userInfo in userInfos)
+            {
+                var user = new AppUser
+                {
+                    Email = userInfo.email,
+                    UserName = userInfo.userName,
+                    FirstName = userInfo.firstName,
+                    LastName = userInfo.lastName,
+                    EmailConfirmed = true,
+                };
+
+                userManager.CreateAsync(user, userInfo.password).Wait();
+            }
+        }
+    }
+
+
     public static void CreateRoles(WebApplication app)
     {
         using (var scoped = app.Services.CreateScope())
         {
-            //userManager User ile alakalı CRUD işlemleri dahil bir çok işlemi içinde barındıran identity kütüphanesinden gelen bir service
             var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
             if (!roleManager.Roles.Any())
             {
@@ -63,7 +95,7 @@ public static class ExtensionsMiddleware
             var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
 
 
-            AppUser? user = userManager.Users.FirstOrDefault(p => p.Email == "test@test.com");
+            AppUser? user = userManager.Users.FirstOrDefault(p => p.Email == "admin@admin.com");
             if(user is not null)
             {
                 AppRole? role = roleManager.Roles.FirstOrDefault(p => p.Name == "Admin");

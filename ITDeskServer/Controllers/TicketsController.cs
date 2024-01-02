@@ -52,7 +52,7 @@ public class TicketsController : ApiController
             {
                 string fileFormat = file.FileName.Substring(file.FileName.LastIndexOf('.'));
                 string fileName = Guid.NewGuid().ToString() + fileFormat;
-                using (var stream = System.IO.File.Create(@"C:\YMYP1\06.WebApi\ITDesk\ITDeskClient\src\assets\files\" + fileName))
+                using (var stream = System.IO.File.Create(@"C:\Users\Win10\Desktop\WorkSpace\Projects\ITDeskProject\ITDeskClient\src\assets\files\" + fileName))
                 {
                     file.CopyTo(stream);
                 }
@@ -104,6 +104,7 @@ public class TicketsController : ApiController
             _context.Tickets
             .Where(p => p.Id == ticketId)
             .Include(p => p.AppUser)
+            .Include(p => p.FileUrls)
             .FirstOrDefault();
         return Ok(details);
     }
@@ -111,17 +112,27 @@ public class TicketsController : ApiController
     [HttpPost]
     public IActionResult AddDetailContent(TicketDetailDto request)
     {
+        Ticket? ticket =
+            _context.Tickets
+                .Where(p => p.Id == request.TicketId)
+                .FirstOrDefault();
+
+        if (ticket is not null)
+        {
+            ticket.IsOpen = true;
+        }
+
         TicketDetail ticketDetail = new()
         {
-            TicketId = request.TicketId,
             AppUserId = request.AppUserId,
             Content = request.Content,
-            CreatedDate = DateTime.Now
+            CreatedDate = DateTime.Now,
+            TicketId = request.TicketId
         };
 
         _context.Add(ticketDetail);
         _context.SaveChanges();
-
+        
         return NoContent();
     }
 
@@ -156,5 +167,18 @@ public class TicketsController : ApiController
         }
 
         return Ok(tickets.ToList());
+    }
+
+    [HttpGet]
+    public IActionResult CloseTicketByTicketId(Guid ticketId)
+    {
+        Ticket? ticket = _context.Tickets.Find(ticketId);
+        if(ticket is not null)
+        {
+            ticket.IsOpen = false;
+            _context.SaveChanges();
+        }
+
+        return NoContent();
     }
 }

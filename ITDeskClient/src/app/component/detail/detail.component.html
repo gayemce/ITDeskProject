@@ -1,35 +1,73 @@
 <div class="container p-0">
 
-    <h1 class="h3 mb-3">Messages</h1>
+    <h1 class="h3 mb-3"></h1>
+    @if(ticket.isOpen){
+    <button class="btn btn-danger" (click)="closeTicket()"> Konuşmayı Sonlandır</button>
+    }@else {
+    <h3 class="text-danger">Konuşma Sonlandırıldı!</h3>
+    }
 
-    <div class="card">
+    <div class="card mt-2">
         <div class="row g-0">
             <div class="col-12 col-lg-12 col-xl-12">
                 <div class="py-2 px-4 border-bottom d-none d-lg-block">
                     <div class="d-flex justify-content-between py-1">
-
-                        <span>
-                            <b> Kullanıcı: </b> {{ticket.appUser.firstName}} {{ticket.appUser.lastName}}
-                        </span>
-                        <span>
-                            <b> Konu: </b> {{ticket.subject}}
-                        </span>
-                        <span>
-                            <b> Oluşturulma Tarihi: </b> {{ticket.createdDate | date: 'dd.MM.yyyy HH.mm'}}
-                        </span>
+                        <p><b>Sohbet Sahibi: </b> <span> {{ticket.appUser?.firstName}}
+                                {{ticket.appUser?.lastName}}</span>
+                        <p>
+                        <p><b>Konu:</b> <span> {{ticket.subject}}</span></p>
+                        <p><b> Oluşturulma Tarihi: </b> <span> {{ticket.createdDate | date: 'dd/MM/yyyy
+                                HH:mm:ss'}}</span></p>
                     </div>
                 </div>
+
+                <div class="card flex justify-content-center">
+                    @if(ticket.fileUrls && ticket.fileUrls.length > 0){
+                    <p-button (click)="showDialog()" icon="pi pi-external-link" label="Eklenen Görselleri İncele"
+                        styleClass="p-button-help"></p-button>
+                    <p-dialog header="Header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }"
+                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+                        <p class="justfy-items-align">
+                            @for(file of ticket.fileUrls; track file){
+                            <li>
+                                <a [href]="'/assets/files/' + file.fileUrl" target="_blank">
+                                    <img [src]="'/assets/files/' + file.fileUrl" width="200" alt="">
+                                </a>
+                            </li>
+                            }
+                        </p>
+                    </p-dialog>
+                    }
+                    @if(!ticket.fileUrls || ticket.fileUrls.length === 0){
+                    <p-button label="Görsel Eklenemiş." styleClass="p-button-warning"></p-button>
+                    <p-dialog header="Header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }"
+                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+                    </p-dialog>
+                    }
+                </div>
+
+                <!-- <ul class="d-flex py-1" style="gap: 20px; list-style: none;">
+                        @for(file of ticket.fileUrls; track file){
+                        <li>
+                            <a [href]="'/assets/files/' + file.fileUrl" target="_blank">
+                                <img [src]="'/assets/files/' + file.fileUrl" width="200" alt="">
+                            </a>
+                        </li>
+                        }@empty {
+                        <p>Herhangi bir dosya eklenemmiş!</p>
+                        }
+                    </ul> -->
+
+
 
                 <div class="position-relative">
                     <div class="chat-messages p-4">
                         @for(detail of details; track detail){
-                        <div class="pb-4" [ngClass]="auth.token.userId === detail.appUserId ? 
-                            'chat-message-right' : 'chat-message-left' ">
+                        <div class="pb-4"
+                            [ngClass]="auth.token.userId === detail.appUserId ? 'chat-message-right' : 'chat-message-left'">
                             <div class="ms-2 me-2">
-                                <div>
-                                    <img src="https://st5.depositphotos.com/81614282/67104/v/450/depositphotos_671048078-stock-illustration-bussines-icon-people-black-color.jpg"
-                                        class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                                </div>
+                                <img src="https://st5.depositphotos.com/81614282/67104/v/450/depositphotos_671048078-stock-illustration-bussines-icon-people-black-color.jpg"
+                                    class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
 
                                 <div class="text-muted small text-nowrap mt-2">
 
@@ -40,7 +78,7 @@
                                     {{detail.appUser.firstName}} {{detail.appUser.lastName}}
                                 </div>
                                 <p>
-                                    {{detail.createdDate | date: 'dd/MM/yyyy HH:mm'}}
+                                    {{detail.createdDate | date: 'dd/MM/yyyy HH:mm:ss'}}
                                 </p>
                                 <p style="word-break: break-all;">
                                     {{detail.content}}
@@ -55,7 +93,7 @@
                     <div class="input-group">
                         <input [(ngModel)]="content" type="text" class="form-control input"
                             placeholder="Type your message">
-                        <button (click)="addDeatilContent()" class="btn btn-primary">Send</button>
+                        <button (click)="addDetailContent()" class="btn btn-primary">Send</button>
                     </div>
                 </div>
 

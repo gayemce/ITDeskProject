@@ -12,7 +12,8 @@ export const routes: Routes = [
     {
         path: "",
         component: LayoutsComponent,
-        canActivateChild: [() => inject(AuthService).checkAuthentication()],
+        // Layoutsa bağlı herhangi bir şey çağrıldığında tetiklenir.
+        canActivateChild: [() => inject(AuthService).checkAuthentication()], 
         children: [
             {
                 path: "",

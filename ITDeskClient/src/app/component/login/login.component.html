@@ -1,51 +1,52 @@
 <p-toast position="bottom-right" [life]="3000"></p-toast>
 
-<div class="card flex justify-content-center align-items-center h100">
-    <p-card header="Giriş Sayfası" subheader="Giriş yapmak için bilgilerinizi doldurun." [style]="{ width: '360px' }">
-        <ng-template pTemplate="header">
-            <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
-        </ng-template>
-        <div class="p-inputgroup">
-            <span class="p-inputgroup-addon">
-                <i class="pi pi-user"></i>
-            </span>
-            <input [(ngModel)]="request.userNameOrEmail" pInputText placeholder="Username" />
+<div class="login">
+    <div class="login__content">
+        <div class="login__img">
+            <img src="../../../assets/images/login-img-1.svg" alt="">
         </div>
-        <div class="mt-2">
-            <div class="p-inputgroup">
-                <span class="p-inputgroup-addon">
-                    <i class="pi pi-lock"></i>
-                </span>
-                <p-password [(ngModel)]="request.password" placeholder="Password" [style]="{width: '100%'}">
-                    <ng-template pTemplate="header">
-                        <h6>Şifre Girin</h6>
-                    </ng-template>
-                    <ng-template pTemplate="footer">
-                        <p-divider></p-divider>
-                        <p class="mt-2">Öneriler</p>
-                        <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
-                            <li>En az 1 büyük karakter</li>
-                            <li>En az 1 küçük karakter</li>
-                            <li>En az 1 numeratik karakter</li>
-                            <li>En az 1 özel karakter</li>
-                            <li>Minimum 6 karakter</li>
-                        </ul>
-                    </ng-template>
-                </p-password>
-            </div>
+
+        <div class="login__forms">
+            <form action="" class="login__registre" id="login-in" autocomplete="off">
+                <h1 class="login__title">IT Desk Giriş Sayfası</h1>
+
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                        <i class="pi pi-user"></i>
+                    </span>
+                    <input [(ngModel)]="request.userNameOrEmail" pInputText placeholder="Kullanıcı Adı veya E-posta" name="username"/>
+                </div>
+
+                <div class="mt-2">
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon">
+                            <i class="pi pi-lock"></i>
+                        </span>
+                        <p-password [(ngModel)]="request.password" name="password" placeholder="Şifre" [style]="{width: '100%'}">
+                            <ng-template pTemplate="header">
+                                <h6>Şifre Girin</h6>
+                            </ng-template>
+                        </p-password>
+                    </div>
+                </div>
+
+                <div class="mt-2 flex align-items-center gap-1">
+                    <p-checkbox [(ngModel)]="request.rememberMe" name="benihatirla" [binary]="true" inputId="ny"></p-checkbox>
+                    <label for="ny">Beni Hatırla</label>
+                </div>
+
+                <div class="mt-2">
+                <p-button (onClick)="signIn()" [style]="{width: '100%'}" severity="info" label="Giriş Yap"></p-button>
+                </div>
+
+                <div class="mt-2">
+                    <span class="login__account">-- Google Hesabınızla Giriş Yapın --</span>
+                </div>
+
+                <div class="mt-2 flex justify-content-center">
+                    <asl-google-signin-button type='icon' size='medium' width='400'></asl-google-signin-button>
+                </div>
+            </form>
         </div>
-        <div class="mt-2 flex align-items-center gap-1">
-            <p-checkbox [(ngModel)]="request.rememberMe" [binary]="true" inputId="ny"></p-checkbox>
-            <label for="ny">Beni Hatırla</label>
-        </div>
-        <ng-template pTemplate="footer">
-            <p-button (onClick)="signIn()" [style]="{width: '100%'}" label="Giriş Yap"></p-button>
-            <div class="flex justify-content-center">
-               <p>-- Google hesabınızla giriş yapın --</p>
-           </div>
-           <div class="flex justify-content-center">                
-               <asl-google-signin-button type='icon' size='medium' width='400'></asl-google-signin-button>        
-           </div>
-        </ng-template>
-    </p-card>
+    </div>
 </div>

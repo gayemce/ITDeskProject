@@ -9,19 +9,21 @@ import { HttpService } from '../../services/http.service';
 import { TicketDetailModel } from '../../models/ticket-detail.model';
 import { FormsModule } from '@angular/forms';
 import { TicketModel } from '../../models/ticket.model';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-detail',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, FormsModule],
+  imports: [CommonModule, CardModule, ButtonModule, FormsModule, DialogModule],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.css'
 })
 export default class DetailComponent {
-  ticket: TicketModel = new TicketModel();
   details: TicketDetailModel[] = [];
   content: string = "";
   ticketId: string = "";
+  ticket: TicketModel = new TicketModel();
+  visible: boolean = false;
 
   constructor(
     public auth: AuthService,
@@ -30,25 +32,28 @@ export default class DetailComponent {
   ) {
     this.activated.params.subscribe((res) => {
       this.ticketId = res["value"];
-      //value okunabildiyse
       this.getDetail();
       this.getTicket();
     })
   }
 
-  getTicket(){
-    this.http.get(`Tickets/GetById?ticketId=${this.ticketId}`,(res)=> {
+  showDialog() {
+    this.visible = true;
+  }
+
+  getTicket() {
+    this.http.get(`Tickets/GetById?ticketId=${this.ticketId}`, (res) => {
       this.ticket = res;
     });
   }
 
-  getDetail(){
-    this.http.get(`Tickets/GetDetails/${this.ticketId}`,(res)=> {
+  getDetail() {
+    this.http.get(`Tickets/GetDetails/${this.ticketId}`, (res) => {
       this.details = res;
     });
   }
 
-  addDeatilContent(){
+  addDetailContent() {
     const data = {
       appUserId: this.auth.token.userId,
       content: this.content,
@@ -58,6 +63,13 @@ export default class DetailComponent {
     this.http.post(`Tickets/AddDetailContent`, data, () => {
       this.content = "";
       this.getDetail();
+      this.getTicket();
     })
+  }
+
+  closeTicket() {
+    this.http.get(`Tickets/CloseTicketByTicketId?ticketId=${this.ticket.id}`, () => {
+      this.getTicket();
+    });
   }
 }
